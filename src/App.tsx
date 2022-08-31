@@ -9,9 +9,8 @@ const App = () => {
     <Router>
       <NavigationBar />
       <Routes>
-        
-        <Route path="/home" element={<Home />} />
-        <Route path="/aide" element={<Aide />} />
+        <Route path="convex-hull/#/home" element={<Home />} />
+        <Route path="convex-hull/#/aide" element={<Aide />} />
         <Route path="/" element={<Home />} />
       </Routes>
   </Router>
