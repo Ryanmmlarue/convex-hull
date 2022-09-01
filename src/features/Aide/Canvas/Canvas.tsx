@@ -1,23 +1,35 @@
 import './Canvas.css'
 import { Stage, Layer, Rect, Circle } from 'react-konva';
 import { useState } from 'react';
+import { Point } from '../../../model/graham-scan';
 
 
 
 const Canvas = () => {
 
   const initialCircles: any = []
-  const [points, setCircles] = useState(initialCircles)
+  const initialPoints: Point[] = []
+  const [circles, setCircles] = useState(initialCircles)
+  const [points, setPoints] = useState(initialPoints)
 
   const placePoint = (event: any) => {
-    console.log(event.evt)
     const x = event.evt.layerX
     const y = event.evt.layerY
-    const point = <Circle x={x} y={y} radius={5} fill="black"/>
-    const temp = points.slice()
-    temp.push(point)
-    setCircles(temp)
-    console.log(x, y)
+
+    // add new circle to state
+    const tempCircles = circles.slice()
+    tempCircles.push(<Circle x={x} y={y} radius={5} fill="black"/>)
+    setCircles(tempCircles)
+
+    // add new points to state
+    const tempPoints = points.slice()
+    tempPoints.push({x, y})
+    setPoints(tempPoints)
+  }
+
+  const clear = () => {
+    setCircles([])
+    setPoints([])
   }
 
   return(
@@ -25,14 +37,20 @@ const Canvas = () => {
       <div className='canvas'>
         <Stage width={500} height={500} onMouseDown={placePoint}>
           <Layer>
-            {points}
+            {circles}
           </Layer>
         </Stage>
       </div>
       <div className="btn-group" role="group">
-        <button type="button" className="btn btn-secondary">Clear</button>
-        <button type="button" className="btn btn-secondary">Reset</button>
-        <button type="button" className="btn btn-secondary">Start</button>
+        <button 
+          type="button" 
+          className="btn btn-secondary"  
+          onClick={clear}
+          >
+            Clear Points
+        </button>
+        <button type="button" className="btn btn-secondary">Reset Algorithm</button>
+        <button type="button" className="btn btn-secondary">Start Algorithm</button>
       </div>
     </>
   )
