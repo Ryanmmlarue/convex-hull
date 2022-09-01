@@ -1,0 +1,15 @@
+.aide-container {
+  height: 100%;
+  width: 100%;
+}
+
+.canvas-container {
+  float: left;
+  width: 70%;
+  height: 500px;
+  outline: 2px dotted black;
+}
+
+.pseudo-code {
+  float: right;
+}

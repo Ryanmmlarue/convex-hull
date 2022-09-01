@@ -5,6 +5,8 @@ export interface Point {
 
 // pseudo-code from: https://www.tutorialspoint.com/Graham-Scan-Algorithm
 // explanation from: https://iq.opengenus.org/graham-scan-convex-hull/
+// Canvas API
+// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 
 const findMinimumIndex= (points: Point[]): number => {
     let min = points[0]

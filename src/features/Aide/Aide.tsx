@@ -1,8 +1,18 @@
+
+import './Aide.css'
+import Canvas from './Canvas/Canvas';
+
 const Aide = () => {
 
+
 return (
-  <div>
-    Aide
+  <div className="aide-container">
+    <div className="canvas-container">
+      <Canvas />
+    </div>
+    <div className="pseudo-code">
+        Pseudocode Here
+    </div>
   </div>
 )
 
