@@ -8,8 +8,8 @@ return (
   <>
   
     <Card className="card">
-      <Card.Header>Team</Card.Header>
       <Card.Body>
+      <Card.Title>Team</Card.Title> 
         <Card.Text>
           Ryan LaRue
         </Card.Text>
@@ -17,8 +17,8 @@ return (
     </Card>
 
     <Card className="card">
-      <Card.Header>Description</Card.Header>
       <Card.Body>
+        <Card.Title>Description</Card.Title> 
         <Card.Text>
           This is a pedagogical aide that demonstrates the Graham's Scan algorithm for finding a Convex Hull.
         </Card.Text>
@@ -26,8 +26,8 @@ return (
     </Card>
 
     <Card className="card">
-      <Card.Header>Background Information</Card.Header>
       <Card.Body>
+        <Card.Title>Background Information</Card.Title> 
         <Card.Text>
           TODO
         </Card.Text>
@@ -35,8 +35,8 @@ return (
     </Card>
 
     <Card className="card">
-      <Card.Header>Assumptions</Card.Header>
       <Card.Body>
+        <Card.Title>Assumptions</Card.Title> 
         <Card.Text>
           TODO
         </Card.Text>
@@ -44,8 +44,8 @@ return (
     </Card>
 
     <Card className="card">
-      <Card.Header>Pseudo-Code</Card.Header>
       <Card.Body>
+        <Card.Title>Pseudo-Code</Card.Title> 
         <Card.Text>
           TODO
         </Card.Text>
@@ -53,8 +53,8 @@ return (
     </Card>
 
     <Card className="card">
-      <Card.Header>Design Choices</Card.Header>
       <Card.Body>
+        <Card.Title>Design Choices</Card.Title>  
         <Card.Text>
           TODO
         </Card.Text>
@@ -62,8 +62,8 @@ return (
     </Card>
 
     <Card className="card">
-      <Card.Header>References</Card.Header>
       <Card.Body>
+      <Card.Title>References</Card.Title>
         <Card.Text>
           TODO
         </Card.Text>

@@ -1,42 +1,32 @@
-import { useEffect, useRef } from "react";
 import './Canvas.css'
+import { Stage, Layer, Rect, Circle } from 'react-konva';
+import { useState } from 'react';
+
+
 
 const Canvas = () => {
 
-  const canvasRef = useRef(null)
+  const initialPoints: any = []
+  const [points, setPoints] = useState(initialPoints)
 
-  const drawPoint = (
-    context: CanvasRenderingContext2D,
-    x: number,
-    y: number
-  ) => {
-    context.beginPath();
-    context.arc(x, y, 4, 0, 2 * Math.PI, false);
-    context.fill()
-    context.stroke();
+  const placePoint = (event: any) => {
+    console.log(event.evt)
+    const x = event.evt.layerX
+    const y = event.evt.layerY
+    const point = <Circle x={x} y={y} radius={5} fill="black"/>
+    const temp = points.slice()
+    temp.push(point)
+    setPoints(temp)
+    console.log(x, y)
   }
 
-  const drawLine = (
-    context: CanvasRenderingContext2D,
-    aX: number,
-    aY: number, 
-    bX: number, 
-    bY: number
-  ) => {
-    context.beginPath()
-    context.moveTo(aX, aY)
-    context.lineTo(bX, bY)
-    context.stroke()
-  }
-
-  useEffect(() => {
-    const canvas: HTMLCanvasElement | null = canvasRef.current
-    const context = canvas!.getContext!('2d')
-
-  }, [])
 
   return(
-    <canvas width="500px" height="500px" ref={canvasRef}></canvas>
+    <Stage width={500} height={500} onMouseDown={placePoint}>
+      <Layer>
+        {points}
+      </Layer>
+    </Stage>
   )
 }
 

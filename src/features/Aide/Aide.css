@@ -6,8 +6,7 @@
 .canvas-container {
   float: left;
   width: 70%;
-  height: 500px;
-  outline: 2px dotted black;
+  height: auto;
 }
 
 .pseudo-code {
