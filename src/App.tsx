@@ -9,9 +9,9 @@ const App = () => {
     <Router>
       <NavigationBar />
       <Switch>
-        <Route exact path="/convex-hull/home" component={Home} />
-        <Route exact path="/convex-hull/aide" component={Aide} />
-        <Route exact path="/convex-hull/" component={Home} />
+        <Route path="/home" component={Home} />
+        <Route path="/aide" component={Aide} />
+        <Route path="/" component={Home} />
       </Switch>
   </Router>
   );
