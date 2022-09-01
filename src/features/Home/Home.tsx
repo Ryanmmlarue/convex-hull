@@ -1,5 +1,4 @@
 import { Card } from "react-bootstrap";
-import Timeline from "./Timeline/Timeline"
 import "./Home.css"
 
 
