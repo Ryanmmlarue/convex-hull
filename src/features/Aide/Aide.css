@@ -3,12 +3,13 @@
   width: 100%;
 }
 
-.canvas-container {
+.left {
   float: left;
-  width: 70%;
+  width: 50%;
   height: auto;
 }
 
-.pseudo-code {
+.right {
   float: right;
+  width: 50%
 }
