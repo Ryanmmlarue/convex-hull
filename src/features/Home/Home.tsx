@@ -36,6 +36,15 @@ return (
     </Card>
 
     <Card className="card">
+      <Card.Header>Assumptions</Card.Header>
+      <Card.Body>
+        <Card.Text>
+          TODO
+        </Card.Text>
+      </Card.Body>
+    </Card>
+
+    <Card className="card">
       <Card.Header>Pseudo-Code</Card.Header>
       <Card.Body>
         <Card.Text>
@@ -50,13 +59,6 @@ return (
         <Card.Text>
           TODO
         </Card.Text>
-      </Card.Body>
-    </Card>
-
-    <Card className="card">
-      <Card.Header>Timeline</Card.Header>
-      <Card.Body>
-      <Timeline />
       </Card.Body>
     </Card>
 
