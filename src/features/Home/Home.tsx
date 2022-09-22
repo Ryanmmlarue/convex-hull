@@ -20,7 +20,7 @@ return (
       <Card.Body>
         <Card.Title>Description</Card.Title> 
         <Card.Text>
-          This is a pedagogical aide that demonstrates the Graham's Scan algorithm for finding a Convex Hull.
+          This is a pedagogical aide that demonstrates the Quickhull algorithm for finding a Convex Hull.
         </Card.Text>
       </Card.Body>
     </Card>

@@ -1,8 +1,9 @@
 import './Aide.css'
 import Canvas from './Canvas/Canvas';
 
-const Aide = () => {
+import Pseudocode from './Pseudocode/Pseudocode'
 
+const Aide = () => {
 
 return (
   <div className="aide-container">
@@ -10,7 +11,7 @@ return (
       <Canvas />
     </div>
     <div className="right">
-        Pseudocode Here
+        <Pseudocode />
     </div>
   </div>
 )
