@@ -4,23 +4,13 @@ import quickHull from '../../../utils/model/QuickHull';
 import { EventType } from '../../../utils/types/Event';
 import './Pseudocode.css'
 
-const Pseudocode = () => {
+interface PseudocodeProps {
+  eventQueue: any
+}
 
+const Pseudocode = (props: PseudocodeProps) => {
 
-    const test = [{x: 10, y: 4}, {x: 7, y: 3}, {x: 8, y: 1}, {x: 6, y: -1}, {x: 9, y: -2}, {x: 11, y: -1}, {x: 12, y: 0}, {x: 15, y: 1}, {x: 14, y: 3}, {x: 13, y: 3}]
-
-    const data = quickHull(test)
-    console.log(data)
-
-    data?.eventQueue.forEach(e => {
-      if (e.eventType === EventType.FindMinMax) {
-        console.log(document.getElementById(e.eventType.toString()))
-        // document.getElementById(e.eventType.toString())!.style.background = 'blue'
-      }
-      
-    })
-
-
+  console.log(props)
 
   return (
     <table>

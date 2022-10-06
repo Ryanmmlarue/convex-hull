@@ -1,3 +1,8 @@
+.canvas {
+  width: 500px;
+  outline: 2px solid black;
+}
+
 .aide-container {
   height: 100%;
   width: 100%;
