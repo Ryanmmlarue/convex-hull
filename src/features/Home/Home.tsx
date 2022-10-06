@@ -65,7 +65,7 @@ return (
       <Card.Body>
       <Card.Title>References</Card.Title>
         <Card.Text>
-          TODO
+        Pseudo-code: https://algs4.cs.princeton.edu/99hull/quickhull/Algorithm.html
         </Card.Text>
       </Card.Body>
     </Card>

@@ -3,9 +3,11 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import NavigationBar from './features/NavigationBar/NavigationBar';
 import Home from './features/Home/Home';
 import Aide from './features/Aide/Aide';
+import { RecoilRoot } from 'recoil';
 
 const App = () => {
   return (
+    <RecoilRoot>
     <Router>
       <NavigationBar />
       <Switch>
@@ -13,7 +15,8 @@ const App = () => {
         <Route path="/aide" component={Aide} />
         <Route path="/" component={Home} />
       </Switch>
-  </Router>
+    </Router>
+    </RecoilRoot>
   );
 }
 

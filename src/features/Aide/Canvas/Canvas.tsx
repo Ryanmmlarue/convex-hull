@@ -1,20 +1,21 @@
 import './Canvas.css'
 import { Stage, Layer, Rect, Circle, Line } from 'react-konva';
 import { useState } from 'react';
-import { Point } from '../../../model/datatypes';
 import Quickhull from '../Quickhull/Quickhull';
+import { Point } from '../../../utils/types/DataTypes';
+import { useRecoilValue } from 'recoil';
+import EventQueueAtom from '../../../utils/atoms/EventQueue';
 
 
 const Canvas = () => {
 
   const initialCircles: any = []
   const initialLines: any = []
-
   const initialPoints: Point[] = []
   const [lines, setLines] = useState(initialLines)
   const [circles, setCircles] = useState(initialCircles)
-
   const [points, setPoints] = useState(initialPoints)
+
 
   const placePoint = (event: any) => {
     const x = event.evt.layerX
@@ -37,10 +38,7 @@ const Canvas = () => {
     setLines(tempLines)
   }
 
-  const removeLine = (a: Point, b: Point) => {
-    const tempLines = lines.slice()
-    console.log(tempLines)
-  }
+  //TODO: removeLine, removePoint
 
   const clear = () => {
     setCircles([])
@@ -52,7 +50,7 @@ const Canvas = () => {
   
   return(
     <>
-      <Quickhull points={points} />
+      <Quickhull points={test} />
       <div className='canvas'>
         <Stage width={500} height={500} onMouseDown={placePoint}>
           <Layer>

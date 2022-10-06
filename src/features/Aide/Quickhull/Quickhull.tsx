@@ -1,65 +1,49 @@
-import { Dir } from "fs";
-import { Point, Line } from "../../../model/datatypes";
+import { useRecoilState } from "recoil";
+import EventQueueAtom from "../../../utils/atoms/EventQueue";
+import { distanceToC, getMinMaxIncides, isCLeft } from "../../../utils/helpers/QuickHullHelpers";
+import { Point, Line } from "../../../utils/types/DataTypes";
+import { EventType, HullEvent } from "../../../utils/types/Event";
 
 interface QuickhullProps {
   points: Point[]
 }
 
-
 const Quickhull = (props: QuickhullProps) => {
 
-  let hull = new Set();
+  const [,setEventQueue] = useRecoilState(EventQueueAtom)
+  const eventQueue: HullEvent[] = [] 
 
-  // negative = c to left
-  // positive = c to right
-  // zero = c is collinear
-  const isCLeft = (a: Point, b: Point, c: Point) => {
-    const cross = ((c.x - a.x) * (b.y - a.y)) - ((c.y - a.y) * (b.x - a.x))
-    return cross < 0 ? -1 : cross > 0 ? 1 : 0;
-  } 
 
-  // return absolute value of cross product (equivelant to magnitude of vector)
-  const distanceToC = (a: Point, b: Point, c: Point) => {
-    return Math.abs(((c.x - a.x) * (b.y - a.y)) - ((c.y - a.y) * (b.x - a.x)))
-  }
+  let hull: Set<Line> = new Set();
 
-  // return the left and rightmost points in the plane
-  const getMinMaxIncides = (points: Point[]) => {
-    let minIndex = 0;
-    let maxIndex = 0;
-    points.forEach((p, index) => {
-      if (p.x > points[maxIndex].x) {
-        maxIndex = index
-      }
-      if (p.x < points[minIndex].x) {
-        minIndex = index
-      }
-    })
-
-    return {minIndex, maxIndex}
-  }
-
-  const recursiveHelper = (points: Point[], leftMost: Point, rightMost: Point, direction: number) => {
+  const findHull = (points: Point[], leftMost: Point, rightMost: Point, direction: number) => {
     let maxIndex = -1;
     let maxDistance = 0;
 
+    // console.log("Looking for maximum point to the " + (direction < 0 ? "left of" : "right of "), leftMost, rightMost)
+
     points.forEach((p, index) => {
-      const dir = isCLeft(leftMost, rightMost, p)
-      const distance = distanceToC(leftMost, rightMost, p)
-      if ((dir === direction) && (distance > maxDistance)) {
-        maxIndex = index
-        maxDistance = distance
+      if (p !== leftMost && p !== rightMost) {
+        if (isCLeft(leftMost, rightMost, p) === direction) {
+          // console.log("\tChecking ", p, "against", leftMost, rightMost)
+          const distance = distanceToC(leftMost, rightMost, p)
+          if (distance > maxDistance) {
+            maxIndex = index
+            maxDistance = distance
+          }
+        } 
       }
     })
 
     if (maxIndex === -1) {
+      eventQueue.push({eventType: EventType.LineToHull, pointA: leftMost, pointB: rightMost})
       hull.add({start: leftMost, end: rightMost})
       return;
-    }
+    } 
 
-    recursiveHelper(points, points[maxIndex], leftMost, -isCLeft(points[maxIndex], leftMost, rightMost))
+    findHull(points, points[maxIndex], leftMost, -isCLeft(points[maxIndex], leftMost, rightMost))
 
-    recursiveHelper(points, points[maxIndex], rightMost, -isCLeft(points[maxIndex], rightMost, leftMost))
+    findHull(points, points[maxIndex], rightMost, -isCLeft(points[maxIndex], rightMost, leftMost))
 
   } 
     
@@ -72,12 +56,15 @@ const Quickhull = (props: QuickhullProps) => {
 
     // find the left and rightmost points in the plane
     const {minIndex, maxIndex} = getMinMaxIncides(points)
+    eventQueue.push({eventType: EventType.MinMax, pointA: points[minIndex], pointB: points[maxIndex]})
+    // console.log("Find Min/Max Indices: ", points[minIndex], points[maxIndex])
 
-    recursiveHelper(points, points[minIndex], points[maxIndex], 1);
+    findHull(points, points[minIndex], points[maxIndex], 1);
 
-    recursiveHelper(points, points[minIndex], points[maxIndex], -1)
+    findHull(points, points[minIndex], points[maxIndex], -1)
 
-    console.log(hull)
+    // console.log(hull)
+    console.log(eventQueue)
   }
 
   driver(props.points)
