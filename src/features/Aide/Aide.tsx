@@ -16,6 +16,7 @@ const Canvas = () => {
   const [lines, setLines] = useState(initialLines)
   const [circles, setCircles] = useState(initialCircles)
   const [points, setPoints] = useState(initialPoints)
+  const [runAnimation, setRunAnimation] = useState(false)
 
   const placePoint = (event: any) => {
     const x = event.evt.layerX
@@ -73,21 +74,21 @@ const Canvas = () => {
         <button 
           type="button" 
           className="btn btn-secondary"
-          onClick={e => console.log('TODO: rest algo button')}
+          onClick={e => setRunAnimation(false)}
           >
             Reset Algorithm
         </button>
         <button 
           type="button" 
           className="btn btn-secondary"
-          onClick={e => console.log('TODO: start algo button')}
+          onClick={e => setRunAnimation(true)}
         >
           Start Algorithm
         </button>
       </div>
       </div>
       <div className="right">
-        <Pseudocode eventQueue={data!.eventQueue} delay={1000}/>
+        <Pseudocode eventQueue={data!.eventQueue} delay={1000} run={runAnimation}/>
     </div>
     </div>
     </>

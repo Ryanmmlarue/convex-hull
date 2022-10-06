@@ -5,17 +5,17 @@ import './Pseudocode.css'
 interface PseudocodeProps {
   eventQueue: HullEvent[]
   delay: number
+  run: boolean
 }
 
 const Pseudocode = (props: PseudocodeProps) => {
 
 
   useEffect(() => {
-    let previous: HTMLElement | null = null;
-    props.eventQueue.forEach((e: HullEvent, i: number) => {
+    if (props.run) {
+      let previous: HTMLElement | null = null;
+      props.eventQueue.forEach((e: HullEvent, i: number) => {
       let line = document.getElementById(e.eventType.toString())!
-      
-
       setTimeout(() => {
         if (previous) {
           previous.classList.remove("highlighted")
@@ -26,8 +26,7 @@ const Pseudocode = (props: PseudocodeProps) => {
       }, i * props.delay)
 
     })
-
-
+    }
   })
 
 
