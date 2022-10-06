@@ -2,12 +2,16 @@ import { Point } from "./DataTypes";
 
 export enum EventType{
   FindMinMax,
-  LineToHull,
-  TestingPoint
+  DrawLine,
+  RecurseS1QH,
+  RecurseS2QH,
+  NoPointReturn,
+  FindC,
+  Divide,
+  RecurseS1FH,
+  RecurseS2FH
 }
 
 export type HullEvent = {
   eventType: EventType
-  pointA: Point;
-  pointB: Point;
 }

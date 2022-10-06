@@ -1,7 +1,27 @@
-import { Table } from "react-bootstrap";
+import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import quickHull from '../../../utils/model/QuickHull';
+import { EventType } from '../../../utils/types/Event';
 import './Pseudocode.css'
 
 const Pseudocode = () => {
+
+
+    const test = [{x: 10, y: 4}, {x: 7, y: 3}, {x: 8, y: 1}, {x: 6, y: -1}, {x: 9, y: -2}, {x: 11, y: -1}, {x: 12, y: 0}, {x: 15, y: 1}, {x: 14, y: 3}, {x: 13, y: 3}]
+
+    const data = quickHull(test)
+    console.log(data)
+
+    data?.eventQueue.forEach(e => {
+      if (e.eventType === EventType.FindMinMax) {
+        console.log(document.getElementById(e.eventType.toString()))
+        // document.getElementById(e.eventType.toString())!.style.background = 'blue'
+      }
+      
+    })
+
+
+
   return (
     <table>
       <tbody>
@@ -9,7 +29,9 @@ const Pseudocode = () => {
           <td><b>QuickHull(S):</b></td>
         </tr>
         <tr>
-          <td className="indent">Find left and right most points A and B</td>
+          <td id={EventType.FindMinMax.toString()} className="indent">
+            Find left and right most points A and B
+            </td>
         </tr>
         <tr>
           <td className="indent">
@@ -33,10 +55,7 @@ const Pseudocode = () => {
           <td className="indent">If Sk has no point, return</td>
         </tr>
         <tr>
-          <td className="indent">Find furthest point, C, from the segment PQ</td>
-        </tr>
-        <tr>
-          <td className="indent">Add C to convex hull</td>
+          <td className="indent">Find furthest point, C, from the segment PQ and add to hull</td>
         </tr>
         <tr>
           <td className="indent">

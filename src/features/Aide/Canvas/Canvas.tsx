@@ -1,9 +1,9 @@
 import './Canvas.css'
 import { Stage, Layer, Rect, Circle, Line } from 'react-konva';
 import { useState } from 'react';
-import Quickhull from '../Quickhull/Quickhull';
 import { Point } from '../../../utils/types/DataTypes';
-import { useRecoilValue } from 'recoil';
+import quickHull from '../../../utils/model/QuickHull';
+import { useRecoilState } from 'recoil';
 import EventQueueAtom from '../../../utils/atoms/EventQueue';
 
 
@@ -15,7 +15,6 @@ const Canvas = () => {
   const [lines, setLines] = useState(initialLines)
   const [circles, setCircles] = useState(initialCircles)
   const [points, setPoints] = useState(initialPoints)
-
 
   const placePoint = (event: any) => {
     const x = event.evt.layerX
@@ -47,10 +46,12 @@ const Canvas = () => {
   }
 
   const test = [{x: 10, y: 4}, {x: 7, y: 3}, {x: 8, y: 1}, {x: 6, y: -1}, {x: 9, y: -2}, {x: 11, y: -1}, {x: 12, y: 0}, {x: 15, y: 1}, {x: 14, y: 3}, {x: 13, y: 3}]
+
+  const data = quickHull(test)
+  console.log(data)
   
   return(
     <>
-      <Quickhull points={test} />
       <div className='canvas'>
         <Stage width={500} height={500} onMouseDown={placePoint}>
           <Layer>
