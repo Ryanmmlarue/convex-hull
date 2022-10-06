@@ -87,7 +87,7 @@ const Canvas = () => {
       </div>
       </div>
       <div className="right">
-        <Pseudocode eventQueue={data!.eventQueue}/>
+        <Pseudocode eventQueue={data!.eventQueue} delay={1000}/>
     </div>
     </div>
     </>

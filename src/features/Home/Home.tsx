@@ -49,7 +49,7 @@ return (
       <Card.Body>
         <Card.Title>Pseudo-Code</Card.Title> 
         <Card.Text>
-          <Pseudocode eventQueue={{}} />
+          {/* <Pseudocode eventQueue={{}} /> */}
         </Card.Text>
       </Card.Body>
     </Card>
