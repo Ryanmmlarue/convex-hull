@@ -6,14 +6,14 @@ const Pseudocode = () => {
     <table>
       <tbody>
         <tr>
-          <td>QuickHull(S):</td>
+          <td><b>QuickHull(S):</b></td>
         </tr>
         <tr>
           <td className="indent">Find left and right most points A and B</td>
         </tr>
         <tr>
           <td className="indent">
-            Draw segment AB, divide remaining points into S1 and S2 where S1 contains points on the right of AB and S1 contains those on the left
+            Draw segment AB, divide remaining points into S1 and S2 where S1 contains points on the right of AB and S2 contains those on the left
           </td>
         </tr>
         <tr>
@@ -27,16 +27,31 @@ const Pseudocode = () => {
           </td>
         </tr>
         <tr>
-          <td>FindHull(Sk, P, Q):</td>
+          <td><b>FindHull(Sk, P, Q):</b></td>
         </tr>
         <tr>
-          <td>Find the farthest point, C, from the segment PQ</td>
+          <td className="indent">If Sk has no point, return</td>
         </tr>
         <tr>
-          <td>If C does not exist, add the segment PQ to the convex hull and return</td>
+          <td className="indent">Find furthest point, C, from the segment PQ</td>
         </tr>
         <tr>
-          <td>FindHull()</td>
+          <td className="indent">Add C to convex hull</td>
+        </tr>
+        <tr>
+          <td className="indent">
+            Divide points into S1 and S2, where S1 contains the points to the right of segment PC, and S2 contains the points to the right of segment CQ
+          </td>
+        </tr>
+        <tr>
+          <td className="indent">
+            FindHull(S1, P, C)
+          </td>
+        </tr>
+        <tr>
+          <td className="indent">
+            FindHull(S2, C, Q)
+          </td>
         </tr>
       </tbody>
     </table>

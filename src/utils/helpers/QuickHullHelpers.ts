@@ -1,10 +1,11 @@
 
-// negative = c to left
-// positive = c to right
+
 
 import { Point } from "../types/DataTypes";
 
 // zero = c is collinear
+// negative = c to left
+// positive = c to right
 export const isCLeft = (a: Point, b: Point, c: Point) => {
   const cross = ((c.x - a.x) * (b.y - a.y)) - ((c.y - a.y) * (b.x - a.x))
   return cross < 0 ? -1 : cross > 0 ? 1 : 0;

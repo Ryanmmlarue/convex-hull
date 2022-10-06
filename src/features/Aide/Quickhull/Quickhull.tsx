@@ -10,40 +10,48 @@ interface QuickhullProps {
 
 const Quickhull = (props: QuickhullProps) => {
 
-  const [,setEventQueue] = useRecoilState(EventQueueAtom)
   const eventQueue: HullEvent[] = [] 
 
+  let hull: Set<Point> = new Set();
 
-  let hull: Set<Line> = new Set();
+  const findHull = (Sk: Point[], P: Point, Q: Point) => {
 
-  const findHull = (points: Point[], leftMost: Point, rightMost: Point, direction: number) => {
-    let maxIndex = -1;
+    if (Sk.length === 0) {
+      return;
+    }
+
+    let C: Point = {x: 0, y: 0};
     let maxDistance = 0;
 
-    // console.log("Looking for maximum point to the " + (direction < 0 ? "left of" : "right of "), leftMost, rightMost)
-
-    points.forEach((p, index) => {
-      if (p !== leftMost && p !== rightMost) {
-        if (isCLeft(leftMost, rightMost, p) === direction) {
-          // console.log("\tChecking ", p, "against", leftMost, rightMost)
-          const distance = distanceToC(leftMost, rightMost, p)
-          if (distance > maxDistance) {
-            maxIndex = index
-            maxDistance = distance
-          }
-        } 
+    Sk.forEach((point) => {
+      if (point !== P && point !== Q) {
+        const distance = distanceToC(P, Q, point)
+        if (distance > maxDistance) {
+          C = point
+          maxDistance = distance
+        }
       }
     })
 
-    if (maxIndex === -1) {
-      eventQueue.push({eventType: EventType.LineToHull, pointA: leftMost, pointB: rightMost})
-      hull.add({start: leftMost, end: rightMost})
-      return;
-    } 
+    hull.add(C)
+    
+    const s1: Point[] = []
+    const s2: Point[] = []
 
-    findHull(points, points[maxIndex], leftMost, -isCLeft(points[maxIndex], leftMost, rightMost))
+    Sk.forEach((point) => {
+      if (point !== P && point !==Q && point !== C) {
+        if (isCLeft(P, C, point) === 1) {
+          s1.push(point)
+        }
 
-    findHull(points, points[maxIndex], rightMost, -isCLeft(points[maxIndex], rightMost, leftMost))
+        if (isCLeft(C, Q, point) === 1) {
+          s2.push(point)
+        }
+      }
+    })
+
+    findHull(s1, P, C)
+    findHull(s2, C, Q)
 
   } 
     
@@ -56,15 +64,26 @@ const Quickhull = (props: QuickhullProps) => {
 
     // find the left and rightmost points in the plane
     const {minIndex, maxIndex} = getMinMaxIncides(points)
-    eventQueue.push({eventType: EventType.MinMax, pointA: points[minIndex], pointB: points[maxIndex]})
-    // console.log("Find Min/Max Indices: ", points[minIndex], points[maxIndex])
+    hull.add(points[minIndex])
+    hull.add(points[maxIndex])
 
-    findHull(points, points[minIndex], points[maxIndex], 1);
+    // divide points into left and right of line
+    const s1: Point[] = []
+    const s2: Point[] = []
+    points.forEach((p) => {
+      if (p !== points[minIndex] && p !== points[maxIndex]) {
+        if (isCLeft(points[minIndex], points[maxIndex], p) === 1) {
+          s1.push(p)
+        } else {
+          s2.push(p)
+        }
+      }
+    })
 
-    findHull(points, points[minIndex], points[maxIndex], -1)
+    findHull(s1, points[minIndex], points[maxIndex])
+    findHull(s2, points[maxIndex], points[minIndex])
 
-    // console.log(hull)
-    console.log(eventQueue)
+    console.log(hull)
   }
 
   driver(props.points)

@@ -1,4 +1,5 @@
 import { Card } from "react-bootstrap";
+import Pseudocode from "../Aide/Pseudocode/Pseudocode";
 import "./Home.css"
 
 
@@ -38,7 +39,8 @@ return (
       <Card.Body>
         <Card.Title>Assumptions</Card.Title> 
         <Card.Text>
-          TODO
+          Co-Linear Points between two points are not included in Hull and 
+          Three Points must be placed for a valid convex hull algorithm to run
         </Card.Text>
       </Card.Body>
     </Card>
@@ -47,7 +49,7 @@ return (
       <Card.Body>
         <Card.Title>Pseudo-Code</Card.Title> 
         <Card.Text>
-          TODO
+          <Pseudocode />
         </Card.Text>
       </Card.Body>
     </Card>
