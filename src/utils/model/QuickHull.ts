@@ -1,6 +1,6 @@
 import { Point } from "../types/DataTypes";
 import { EventType, HullEvent } from "../types/Event";
-import { distanceToC, getMinMaxIncides, isCLeft } from "./QuickHullHelpers";
+import { distanceToC, getMinMaxIndices, isCLeft } from "./QuickHullHelpers";
 
 
 const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: HullEvent[]) => {
@@ -58,7 +58,7 @@ const quickHull = (points: Point[]) => {
   }
 
   // find the left and rightmost points in the plane
-  const {minIndex, maxIndex} = getMinMaxIncides(points)
+  const {minIndex, maxIndex} = getMinMaxIndices(points)
   hull.push(points[minIndex])
   hull.push(points[maxIndex])
 
@@ -80,6 +80,7 @@ const quickHull = (points: Point[]) => {
 
   eventQueue.push({eventType: EventType.RecurseS1QH})
   findHull(s1, points[minIndex], points[maxIndex], hull, eventQueue)
+
   eventQueue.push({eventType: EventType.RecurseS2QH})
   findHull(s2, points[maxIndex], points[minIndex], hull, eventQueue)
 

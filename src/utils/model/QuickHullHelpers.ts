@@ -17,7 +17,7 @@ export const distanceToC = (a: Point, b: Point, c: Point) => {
 }
 
 // return the left and rightmost points in the plane
-export const getMinMaxIncides = (points: Point[]) => {
+export const getMinMaxIndices = (points: Point[]) => {
   let minIndex = 0;
   let maxIndex = 0;
   points.forEach((p, index) => {
