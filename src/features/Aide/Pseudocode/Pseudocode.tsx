@@ -3,7 +3,7 @@ import { EventType, HullEvent } from '../../../utils/types/Event';
 import './Pseudocode.css'
 
 interface PseudocodeProps {
-  event: HullEvent
+  event?: HullEvent
 }
 
 const Pseudocode = (props: PseudocodeProps) => {
