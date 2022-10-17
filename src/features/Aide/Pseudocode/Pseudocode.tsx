@@ -10,7 +10,7 @@ const Pseudocode = (props: PseudocodeProps) => {
 
 
   let previous = document.getElementsByClassName("highlighted");
-  console.log(previous.length >= 1)
+
   if (previous.length >= 1) {
     previous[0].classList.remove("highlighted")
   }

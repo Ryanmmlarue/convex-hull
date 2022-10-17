@@ -14,4 +14,5 @@ export enum EventType{
 
 export type HullEvent = {
   eventType: EventType
+  points?: Point[]
 }

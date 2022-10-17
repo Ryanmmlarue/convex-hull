@@ -3,14 +3,11 @@ import { Stage, Layer, Rect, Circle, Line } from 'react-konva';
 import { useEffect, useRef, useState } from 'react';
 import { Point } from '../../utils/types/DataTypes';
 import quickHull from '../../utils/model/QuickHull';
-import { useRecoilState } from 'recoil';
-import EventQueueAtom from '../../utils/atoms/EventQueue';
 import Pseudocode from './Pseudocode/Pseudocode';
-import { HullEvent } from '../../utils/types/Event';
-import userEvent from '@testing-library/user-event';
+import { EventType, HullEvent } from '../../utils/types/Event';
 
 
-const Canvas = () => {
+const Aide = () => {
 
   const initialCircles: any = []
   const initialLines: any = []
@@ -51,17 +48,43 @@ const Canvas = () => {
     setCircles([])
     setPoints([])
     setLines([])
+    setEventIndex(-1)
   }
 
   const nextStep = () => {
     if ((eventIndex + 1) < eventQueue.length) {
       setEventIndex(eventIndex + 1)
+      animate(eventQueue[eventIndex])
     }
   }
 
   const previousStep = () => {
     if ((eventIndex - 1) >= 0) {
       setEventIndex(eventIndex - 1)
+      animate(eventQueue[eventIndex])
+    }
+  }
+
+  const findPointIndex = (point: Point) => {
+    return points.indexOf(point)
+  }
+
+
+
+  const animate = (event: HullEvent) => {
+    switch(event.eventType) {
+      case EventType.FindMinMax:
+        let tempCircles = circles.slice()
+        let minIndex = findPointIndex(event.points![0])
+        let maxIndex = findPointIndex(event.points![1])
+        let min = tempCircles[minIndex]
+        let max = tempCircles[maxIndex]
+
+        tempCircles[minIndex] = <Circle x={min.props.x} y={min.props.y} radius={min.props.radius} fill="red"/>
+        tempCircles[maxIndex] = <Circle x={max.props.x} y={max.props.y} radius={max.props.radius} fill="red"/>
+
+        setCircles(tempCircles)
+         
     }
   }
 
@@ -74,14 +97,12 @@ const Canvas = () => {
     }
   }, [points])
 
-  console.log(eventQueue[eventIndex])
-
   return(
     <>
     <div className="aide-container">
       <div className="left">
       <div className='canvas'>
-        <Stage width={500} height={500} onMouseDown={placePoint}>
+        <Stage width={750} height={750} onMouseDown={placePoint}>
           <Layer>
             {circles}
             {lines}
@@ -130,4 +151,4 @@ const Canvas = () => {
   )
 }
 
-export default Canvas;
+export default Aide;

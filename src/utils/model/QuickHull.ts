@@ -62,7 +62,7 @@ const quickHull = (points: Point[]) => {
   hull.push(points[minIndex])
   hull.push(points[maxIndex])
 
-  eventQueue.push({eventType: EventType.FindMinMax})
+  eventQueue.push({eventType: EventType.FindMinMax, points: [points[minIndex], points[maxIndex]]})
   eventQueue.push({eventType: EventType.DrawLine})
 
   // divide points into left and right of line
