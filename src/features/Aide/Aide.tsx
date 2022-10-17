@@ -1,11 +1,13 @@
 import './Aide.css'
 import { Stage, Layer, Rect, Circle, Line } from 'react-konva';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Point } from '../../utils/types/DataTypes';
 import quickHull from '../../utils/model/QuickHull';
 import { useRecoilState } from 'recoil';
 import EventQueueAtom from '../../utils/atoms/EventQueue';
 import Pseudocode from './Pseudocode/Pseudocode';
+import { HullEvent } from '../../utils/types/Event';
+import userEvent from '@testing-library/user-event';
 
 
 const Canvas = () => {
@@ -13,10 +15,12 @@ const Canvas = () => {
   const initialCircles: any = []
   const initialLines: any = []
   const initialPoints: Point[] = []
+  const initialEventQueue: HullEvent[] = []
   const [lines, setLines] = useState(initialLines)
   const [circles, setCircles] = useState(initialCircles)
   const [points, setPoints] = useState(initialPoints)
-  const [runAnimation, setRunAnimation] = useState(false)
+  const [eventQueue, setEventQueue] = useState(initialEventQueue)
+  const [eventIndex, setEventIndex] = useState(-1)
 
   const placePoint = (event: any) => {
     const x = event.evt.layerX
@@ -31,6 +35,8 @@ const Canvas = () => {
     const tempPoints = points.slice()
     tempPoints.push({x, y})
     setPoints(tempPoints)
+
+    setEventIndex(-1)
   }
 
   const placeLine = (a: Point, b: Point) => {
@@ -47,10 +53,29 @@ const Canvas = () => {
     setLines([])
   }
 
-  const test = [{x: 10, y: 4}, {x: 7, y: 3}, {x: 8, y: 1}, {x: 6, y: -1}, {x: 9, y: -2}, {x: 11, y: -1}, {x: 12, y: 0}, {x: 15, y: 1}, {x: 14, y: 3}, {x: 13, y: 3}]
-  const data = quickHull(test)
+  const nextStep = () => {
+    if ((eventIndex + 1) < eventQueue.length) {
+      setEventIndex(eventIndex + 1)
+    }
+  }
 
-  
+  const previousStep = () => {
+    if ((eventIndex - 1) >= 0) {
+      setEventIndex(eventIndex - 1)
+    }
+  }
+
+
+  // runs the quickHull algorithm any time a new point is added to the plane
+  useEffect(() => {
+    if (points.length >= 3) {
+      const data = quickHull(points)
+      setEventQueue(data!.eventQueue)
+    }
+  }, [points])
+
+  console.log(eventQueue[eventIndex])
+
   return(
     <>
     <div className="aide-container">
@@ -74,21 +99,31 @@ const Canvas = () => {
         <button 
           type="button" 
           className="btn btn-secondary"
-          onClick={e => setRunAnimation(false)}
+          disabled = {eventIndex < 0}
+          onClick = {e => setEventIndex(-1)}
           >
             Reset Algorithm
         </button>
         <button 
           type="button" 
           className="btn btn-secondary"
-          onClick={e => setRunAnimation(true)}
+          disabled={points.length < 3}
+          onClick={e => previousStep()}
         >
-          Start Algorithm
+          Previous Step
+        </button>
+        <button 
+          type="button" 
+          className="btn btn-secondary"
+          disabled={points.length < 3}
+          onClick={e => nextStep()}
+        >
+          Next Step
         </button>
       </div>
       </div>
       <div className="right">
-        <Pseudocode eventQueue={data!.eventQueue} delay={1000} run={runAnimation}/>
+        <Pseudocode event={eventQueue[eventIndex]}/>
     </div>
     </div>
     </>

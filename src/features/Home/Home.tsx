@@ -30,7 +30,7 @@ return (
       <Card.Body>
         <Card.Title>Background Information</Card.Title> 
         <Card.Text>
-          TODO
+          TODO: 1-2 paragraphs
         </Card.Text>
       </Card.Body>
     </Card>
@@ -138,6 +138,7 @@ return (
             </tr>
             </tbody>
           </table>
+          TODO: explain what parts are being animated
         </Card.Text>
       </Card.Body>
     </Card>
@@ -146,7 +147,7 @@ return (
       <Card.Body>
         <Card.Title>Design Choices</Card.Title>  
         <Card.Text>
-          TODO
+          TODO: explain design choices
         </Card.Text>
       </Card.Body>
     </Card>
@@ -155,7 +156,32 @@ return (
       <Card.Body>
       <Card.Title>References</Card.Title>
         <Card.Text>
-        Pseudo-code: https://algs4.cs.princeton.edu/99hull/quickhull/Algorithm.html
+          <ul>
+            <li>
+              <b>Quickhull Paper: </b>
+              <a href="https://dpd.cs.princeton.edu/Papers/BarberDobkinHuhdanpaa.pdf">https://dpd.cs.princeton.edu/Papers/BarberDobkinHuhdanpaa.pdf</a>
+            </li>
+            <li>
+              <b>Pseudo-code: </b> 
+              <a href="https://algs4.cs.princeton.edu/99hull/quickhull/Algorithm.html">https://algs4.cs.princeton.edu/99hull/quickhull/Algorithm.html</a>
+            </li>
+            <li>
+              <b>TypeScript Documentation: </b>
+              <a href="https://www.typescriptlang.org/docs/handbook/intro.html">https://www.typescriptlang.org/docs/handbook/intro.html</a>
+            </li>
+            <li>
+              <b>React Documentation: </b>
+              <a href="https://reactjs.org/docs/getting-started.html">https://reactjs.org/docs/getting-started.html</a>
+            </li>
+            <li>
+              <b>Recoil Documentation: </b>
+              <a href="https://recoiljs.org/docs/introduction/installation/">https://recoiljs.org/docs/introduction/installation/</a>
+            </li>
+            <li>
+              <b>Konva Documentation: </b>
+              <a href="https://konvajs.org/docs/react/index.html">https://konvajs.org/docs/react/index.html</a>
+            </li>
+          </ul>
         </Card.Text>
       </Card.Body>
     </Card>

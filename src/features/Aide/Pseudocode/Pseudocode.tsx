@@ -3,32 +3,22 @@ import { EventType, HullEvent } from '../../../utils/types/Event';
 import './Pseudocode.css'
 
 interface PseudocodeProps {
-  eventQueue: HullEvent[]
-  delay: number
-  run: boolean
+  event: HullEvent
 }
 
 const Pseudocode = (props: PseudocodeProps) => {
 
 
-  useEffect(() => {
-    if (props.run) {
-      let previous: HTMLElement | null = null;
-      props.eventQueue.forEach((e: HullEvent, i: number) => {
-      let line = document.getElementById(e.eventType.toString())!
-      setTimeout(() => {
-        if (previous) {
-          previous.classList.remove("highlighted")
-        }
+  let previous = document.getElementsByClassName("highlighted");
+  console.log(previous.length >= 1)
+  if (previous.length >= 1) {
+    previous[0].classList.remove("highlighted")
+  }
 
-        line.classList.add("highlighted")
-        previous = line
-      }, i * props.delay)
-
-    })
-    }
-  })
-
+  if (props.event) {
+    let line = document.getElementById(props.event.eventType.toString())!
+    line.classList.add("highlighted")
+  }
 
   return (
     <table>
