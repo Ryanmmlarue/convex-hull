@@ -34,7 +34,7 @@ const Pseudocode = (props: PseudocodeProps) => {
           id={EventType.FindMinMax.toString()} 
           className="indent"
           >
-            Find left and right most points A and B
+            Find left and right most points A and B, add both to hull
           </td>
         </tr>
         <tr>

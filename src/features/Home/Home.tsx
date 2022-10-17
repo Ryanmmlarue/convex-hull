@@ -71,7 +71,7 @@ return (
               <td 
               className="indent"
               >
-                Find left and right most points A and B
+                Find left and right most points A and B, add both to hull
               </td>
             </tr>
             <tr>
@@ -172,10 +172,6 @@ return (
             <li>
               <b>React Documentation: </b>
               <a href="https://reactjs.org/docs/getting-started.html">https://reactjs.org/docs/getting-started.html</a>
-            </li>
-            <li>
-              <b>Recoil Documentation: </b>
-              <a href="https://recoiljs.org/docs/introduction/installation/">https://recoiljs.org/docs/introduction/installation/</a>
             </li>
             <li>
               <b>Konva Documentation: </b>

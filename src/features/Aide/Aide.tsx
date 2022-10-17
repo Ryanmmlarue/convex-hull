@@ -36,10 +36,21 @@ const Aide = () => {
     setEventIndex(-1)
   }
 
-  const placeLine = (a: Point, b: Point) => {
+  const placeLine = (a: Point, b: Point, color: string) => {
     const tempLines = lines.slice()
-    tempLines.push(<Line points={[a.x, a.y, b.x, b.y]} stroke={'black'}/>)
+    tempLines.push(<Line points={[a.x, a.y, b.x, b.y]} stroke={color}/>)
     setLines(tempLines)
+  }
+
+  const updateCircleColors = (indices: number[], color: string) => {
+    let tempCircles = circles.slice()
+
+    indices.forEach(i => {
+      let circle = tempCircles[i]
+      tempCircles[i] = <Circle x={circle.props.x} y={circle.props.y} radius={circle.props.radius} fill={color}/>
+    })
+
+    setCircles(tempCircles)
   }
 
   //TODO: removeLine, removePoint
@@ -54,14 +65,14 @@ const Aide = () => {
   const nextStep = () => {
     if ((eventIndex + 1) < eventQueue.length) {
       setEventIndex(eventIndex + 1)
-      animate(eventQueue[eventIndex])
+      // animate(eventQueue[eventIndex])
     }
   }
 
   const previousStep = () => {
     if ((eventIndex - 1) >= 0) {
       setEventIndex(eventIndex - 1)
-      animate(eventQueue[eventIndex])
+      // animate(eventQueue[eventIndex])
     }
   }
 
@@ -72,19 +83,19 @@ const Aide = () => {
 
 
   const animate = (event: HullEvent) => {
+
+    if (event === undefined) return;
+
     switch(event.eventType) {
       case EventType.FindMinMax:
-        let tempCircles = circles.slice()
-        let minIndex = findPointIndex(event.points![0])
-        let maxIndex = findPointIndex(event.points![1])
-        let min = tempCircles[minIndex]
-        let max = tempCircles[maxIndex]
-
-        tempCircles[minIndex] = <Circle x={min.props.x} y={min.props.y} radius={min.props.radius} fill="red"/>
-        tempCircles[maxIndex] = <Circle x={max.props.x} y={max.props.y} radius={max.props.radius} fill="red"/>
-
-        setCircles(tempCircles)
-         
+        updateCircleColors([findPointIndex(event.points![0]), findPointIndex(event.points![1])], 'red')
+        break;
+      case EventType.DrawLine:
+        placeLine(event.points![0], event.points![1], 'green')
+        break;
+      case EventType.FindC:
+        updateCircleColors([findPointIndex(event.points![0])], 'red')
+        break;
     }
   }
 
@@ -96,6 +107,10 @@ const Aide = () => {
       setEventQueue(data!.eventQueue)
     }
   }, [points])
+
+  useEffect(() => {
+    animate(eventQueue[eventIndex])
+  }, [eventIndex])
 
   return(
     <>

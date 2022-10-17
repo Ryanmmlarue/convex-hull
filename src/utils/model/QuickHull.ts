@@ -10,7 +10,7 @@ const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: Hu
     return;
   }
 
-  eventQueue.push({eventType: EventType.FindC})
+  
   let C: Point = {x: 0, y: 0};
   let maxDistance = 0;
   Sk.forEach((point) => {
@@ -23,6 +23,8 @@ const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: Hu
     }
   })
   hull.push(C)
+  eventQueue.push({eventType: EventType.FindC, points: [C]})
+  
   
   eventQueue.push({eventType: EventType.Divide})
   const s1: Point[] = []
@@ -63,7 +65,7 @@ const quickHull = (points: Point[]) => {
   hull.push(points[maxIndex])
 
   eventQueue.push({eventType: EventType.FindMinMax, points: [points[minIndex], points[maxIndex]]})
-  eventQueue.push({eventType: EventType.DrawLine})
+  eventQueue.push({eventType: EventType.DrawLine, points: [points[minIndex], points[maxIndex]]})
 
   // divide points into left and right of line
   const s1: Point[] = []
