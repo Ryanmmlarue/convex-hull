@@ -88,7 +88,7 @@ const Pseudocode = (props: PseudocodeProps) => {
           id={EventType.Divide.toString()} 
           className="indent"
           >
-            Divide points into S1 and S2, where S1 contains the points to the right of segment PC, and S2 contains the points to the right of segment CQ
+            Draw Segment PC and CQ. Divide points into S1 and S2, where S1 contains the points to the right of segment PC, and S2 contains the points to the right of segment CQ
           </td>
         </tr>
         <tr>

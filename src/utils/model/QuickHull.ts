@@ -23,10 +23,10 @@ const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: Hu
     }
   })
   hull.push(C)
-  eventQueue.push({eventType: EventType.FindC, points: [C]})
+  eventQueue.push({eventType: EventType.FindC, points: [C, P, Q]})
   
   
-  eventQueue.push({eventType: EventType.Divide})
+  eventQueue.push({eventType: EventType.Divide, points: [P, C, Q]})
   const s1: Point[] = []
   const s2: Point[] = []
   Sk.forEach((point) => {
@@ -83,7 +83,8 @@ const quickHull = (points: Point[]) => {
   eventQueue.push({eventType: EventType.RecurseS1QH})
   findHull(s1, points[minIndex], points[maxIndex], hull, eventQueue)
 
-  eventQueue.push({eventType: EventType.RecurseS2QH})
+
+  eventQueue.push({eventType: EventType.RecurseS2QH, points: [points[minIndex], points[maxIndex]]})
   findHull(s2, points[maxIndex], points[minIndex], hull, eventQueue)
 
   return {hull, eventQueue}

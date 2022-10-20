@@ -36,11 +36,22 @@ const Aide = () => {
     setEventIndex(-1)
   }
 
-  const placeLine = (a: Point, b: Point, color: string) => {
+  const placeLines = (startPoints: Point[], endPoints: Point[], removeA?: Point, removeB?: Point) => {
     const tempLines = lines.slice()
-    tempLines.push(<Line points={[a.x, a.y, b.x, b.y]} stroke={color}/>)
+    for (let i = 0; i < startPoints.length; i++) {
+      tempLines.push(<Line points={[startPoints[i].x, startPoints[i].y, endPoints[i].x, endPoints[i].y]} stroke={'green'}/>)
+    }
+
+    // this does not remove the correct index
+    if (removeA && removeB) {
+      const line = <Line points={[removeA.x, removeA.y, removeB.x, removeB.y]} stroke={'green'}/>
+      tempLines.splice(findLineIndex(removeA, removeB), 1)
+    }
+
     setLines(tempLines)
   }
+
+
 
   const updateCircleColors = (indices: number[], color: string) => {
     let tempCircles = circles.slice()
@@ -53,7 +64,14 @@ const Aide = () => {
     setCircles(tempCircles)
   }
 
-  //TODO: removeLine, removePoint
+  // this does not actually find the correct index
+  const removeLine = (a: Point, b: Point) => {
+    const tempLines = lines.slice()
+    const line = <Line points={[a.x, a.y, b.x, b.y]} stroke={'green'}/>
+    tempLines.splice(findLineIndex(a, b), 1)
+    setLines(tempLines)
+  }
+
 
   const clear = () => {
     setCircles([])
@@ -80,6 +98,15 @@ const Aide = () => {
     return points.indexOf(point)
   }
 
+  const findLineIndex = (a: Point, b: Point) => {
+    lines.forEach((l: any, i: number) => {
+      let points = l.props.points
+      if (points[0] == a.x && points[1] == a.y && b.x == points[2] && b.y == points[3]) {
+        return i
+      }
+    })
+  }
+
 
 
   const animate = (event: HullEvent) => {
@@ -88,13 +115,25 @@ const Aide = () => {
 
     switch(event.eventType) {
       case EventType.FindMinMax:
+        // color AB
         updateCircleColors([findPointIndex(event.points![0]), findPointIndex(event.points![1])], 'red')
         break;
       case EventType.DrawLine:
-        placeLine(event.points![0], event.points![1], 'green')
+        // draw AB
+        placeLines([event.points![0]], [event.points![1]])
         break;
       case EventType.FindC:
+        // color C
         updateCircleColors([findPointIndex(event.points![0])], 'red')
+        placeLines([event.points![1]], [event.points![2]])
+        break;
+      case EventType.Divide:
+        // draw PC, draw CQ, remove PQ
+        placeLines([event.points![0], event.points![1]], [event.points![1], event.points![2]], event.points![0], event.points![2])
+        break;
+      case EventType.RecurseS2QH:
+        //remove AB
+        removeLine(event.points![0], event.points![1])
         break;
     }
   }
@@ -143,7 +182,8 @@ const Aide = () => {
         <button 
           type="button" 
           className="btn btn-secondary"
-          disabled={points.length < 3}
+          // disabled={points.length < 3}
+          disabled = {true}
           onClick={e => previousStep()}
         >
           Previous Step
