@@ -80,7 +80,7 @@ const quickHull = (points: Point[]) => {
     }
   })
 
-  eventQueue.push({eventType: EventType.RecurseS1QH})
+  eventQueue.push({eventType: EventType.RecurseS1QH, points: [points[minIndex], points[maxIndex]]})
   findHull(s1, points[minIndex], points[maxIndex], hull, eventQueue)
 
 

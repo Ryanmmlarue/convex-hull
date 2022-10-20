@@ -36,16 +36,23 @@ const Aide = () => {
     setEventIndex(-1)
   }
 
-  const placeLines = (startPoints: Point[], endPoints: Point[], removeA?: Point, removeB?: Point) => {
+  const updateLines = (startPoints: Point[], endPoints: Point[], removeA?: Point, removeB?: Point) => {
     const tempLines = lines.slice()
     for (let i = 0; i < startPoints.length; i++) {
-      tempLines.push(<Line points={[startPoints[i].x, startPoints[i].y, endPoints[i].x, endPoints[i].y]} stroke={'green'}/>)
+      if (findLineIndex(tempLines, startPoints[i], endPoints[i]) == -1) {
+        tempLines.push(<Line points={[startPoints[i].x, startPoints[i].y, endPoints[i].x, endPoints[i].y]} stroke={'green'}/>)
+      }
+      
     }
+
 
     // this does not remove the correct index
     if (removeA && removeB) {
-      const line = <Line points={[removeA.x, removeA.y, removeB.x, removeB.y]} stroke={'green'}/>
-      tempLines.splice(findLineIndex(removeA, removeB), 1)
+      const index = findLineIndex(tempLines, removeA, removeB)
+      if (index !== -1) {
+        tempLines.splice(index, 1)
+      }
+      
     }
 
     setLines(tempLines)
@@ -67,8 +74,10 @@ const Aide = () => {
   // this does not actually find the correct index
   const removeLine = (a: Point, b: Point) => {
     const tempLines = lines.slice()
-    const line = <Line points={[a.x, a.y, b.x, b.y]} stroke={'green'}/>
-    tempLines.splice(findLineIndex(a, b), 1)
+    const index = findLineIndex(tempLines, a, b)
+    if (index !== -1) {
+      tempLines.splice(index, 1)
+    }
     setLines(tempLines)
   }
 
@@ -98,16 +107,18 @@ const Aide = () => {
     return points.indexOf(point)
   }
 
-  const findLineIndex = (a: Point, b: Point) => {
-    lines.forEach((l: any, i: number) => {
-      let points = l.props.points
-      if (points[0] == a.x && points[1] == a.y && b.x == points[2] && b.y == points[3]) {
-        return i
+  const findLineIndex = (lines: any, a: Point, b: Point) => {
+    for (let i = 0; i < lines.length; i++) {
+      let points = lines[i].props.points
+      if (points.indexOf(a.x) !== -1 && points.indexOf(a.y) !== -1 && 
+          points.indexOf(b.x) !== -1 && points.indexOf(b.y) !== -1) {
+            return i
       }
-    })
+    }
+    return -1
   }
 
-
+  console.log(lines)
 
   const animate = (event: HullEvent) => {
 
@@ -120,21 +131,21 @@ const Aide = () => {
         break;
       case EventType.DrawLine:
         // draw AB
-        placeLines([event.points![0]], [event.points![1]])
+        updateLines([event.points![0]], [event.points![1]])
         break;
       case EventType.FindC:
         // color C
         updateCircleColors([findPointIndex(event.points![0])], 'red')
-        placeLines([event.points![1]], [event.points![2]])
+        updateLines([event.points![1]], [event.points![2]])
         break;
       case EventType.Divide:
         // draw PC, draw CQ, remove PQ
-        placeLines([event.points![0], event.points![1]], [event.points![1], event.points![2]], event.points![0], event.points![2])
+        updateLines([event.points![0], event.points![1]], [event.points![1], event.points![2]], event.points![0], event.points![2])
         break;
-      case EventType.RecurseS2QH:
-        //remove AB
-        removeLine(event.points![0], event.points![1])
-        break;
+      // case EventType.RecurseS2QH:
+      // case EventType.RecurseS1QH:
+      //     removeLine(event.points![0], event.points![1])
+      //     break;
     }
   }
 
