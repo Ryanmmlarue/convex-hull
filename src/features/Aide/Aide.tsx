@@ -20,20 +20,20 @@ const Aide = () => {
   const [eventIndex, setEventIndex] = useState(-1)
 
   const placePoint = (event: any) => {
-    const x = event.evt.layerX
-    const y = event.evt.layerY
-
-    // add new circle to state
-    const tempCircles = circles.slice()
-    tempCircles.push(<Circle x={x} y={y} radius={5} fill="black"/>)
-    setCircles(tempCircles)
-
-    // add new points to state
-    const tempPoints = points.slice()
-    tempPoints.push({x, y})
-    setPoints(tempPoints)
-
-    setEventIndex(-1)
+    if (eventIndex === -1) {
+      const x = event.evt.layerX
+      const y = event.evt.layerY
+  
+      // add new circle to state
+      const tempCircles = circles.slice()
+      tempCircles.push(<Circle x={x} y={y} radius={5} fill="black"/>)
+      setCircles(tempCircles)
+  
+      // add new points to state
+      const tempPoints = points.slice()
+      tempPoints.push({x, y})
+      setPoints(tempPoints)
+    }
   }
 
   const updateLines = (startPoints: Point[], endPoints: Point[], removeA?: Point, removeB?: Point) => {
@@ -47,7 +47,7 @@ const Aide = () => {
 
 
     // this does not remove the correct index
-    if (removeA && removeB) {
+    if (removeA && removeB && points.length > 3) {
       const index = findLineIndex(tempLines, removeA, removeB)
       if (index !== -1) {
         tempLines.splice(index, 1)
@@ -71,14 +71,12 @@ const Aide = () => {
     setCircles(tempCircles)
   }
 
-  // this does not actually find the correct index
-  const removeLine = (a: Point, b: Point) => {
-    const tempLines = lines.slice()
-    const index = findLineIndex(tempLines, a, b)
-    if (index !== -1) {
-      tempLines.splice(index, 1)
-    }
-    setLines(tempLines)
+
+  const resetCanvas = () => {
+    setLines([])
+    const indices = points.map((p, i) => i)
+    updateCircleColors(indices, 'black')
+    setEventIndex(-1)
   }
 
 
@@ -118,7 +116,6 @@ const Aide = () => {
     return -1
   }
 
-  console.log(lines)
 
   const animate = (event: HullEvent) => {
 
@@ -142,10 +139,6 @@ const Aide = () => {
         // draw PC, draw CQ, remove PQ
         updateLines([event.points![0], event.points![1]], [event.points![1], event.points![2]], event.points![0], event.points![2])
         break;
-      // case EventType.RecurseS2QH:
-      // case EventType.RecurseS1QH:
-      //     removeLine(event.points![0], event.points![1])
-      //     break;
     }
   }
 
@@ -186,7 +179,7 @@ const Aide = () => {
           type="button" 
           className="btn btn-secondary"
           disabled = {eventIndex < 0}
-          onClick = {e => setEventIndex(-1)}
+          onClick = {e => {resetCanvas()}}
           >
             Reset Algorithm
         </button>
