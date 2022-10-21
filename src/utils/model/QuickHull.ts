@@ -9,7 +9,6 @@ const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: Hu
     eventQueue.push({eventType: EventType.NoPointReturn})
     return;
   }
-
   
   let C: Point = {x: 0, y: 0};
   let maxDistance = 0;

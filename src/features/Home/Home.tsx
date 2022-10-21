@@ -30,15 +30,11 @@ return (
       <Card.Body>
         <Card.Title>Background Information</Card.Title> 
         <Card.Text>
-          TODO: 1-2 paragraphs
-        </Card.Text>
-      </Card.Body>
-    </Card>
+          TODO: Background information about the problem and approach. Does not need to be long (one or two paragraphs is ok), but state any 
+          assumptions that are necessary for your approach to work. <br />
 
-    <Card className="card">
-      <Card.Body>
-        <Card.Title>Assumptions</Card.Title> 
-        <Card.Text>
+          <br />
+
           There were several critical assumptions made for this project:
           <ul>
             <li>
@@ -55,6 +51,7 @@ return (
       </Card.Body>
     </Card>
 
+
     <Card className="card">
       <Card.Body>
         <Card.Title>Pseudo-Code</Card.Title> 
@@ -66,7 +63,7 @@ return (
       <Card.Body>
         <Card.Title>Design Choices</Card.Title>  
         <Card.Text>
-          TODO: explain design choices
+          TODO: Discuss any interesting choices that you made in the implementation of the algorithm.
         </Card.Text>
       </Card.Body>
     </Card>

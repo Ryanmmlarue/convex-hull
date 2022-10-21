@@ -6,6 +6,9 @@ import quickHull from '../../utils/model/QuickHull';
 import Pseudocode from './Pseudocode/Pseudocode';
 import { EventType, HullEvent } from '../../utils/types/Event';
 
+// TODO: reverse order
+// TODO: horse-shoe shape breaks 
+// TODO: reset button not working
 
 const Aide = () => {
 
@@ -138,6 +141,9 @@ const Aide = () => {
       case EventType.Divide:
         // draw PC, draw CQ, remove PQ
         updateLines([event.points![0], event.points![1]], [event.points![1], event.points![2]], event.points![0], event.points![2])
+        break;
+      case EventType.RecurseS2QH:
+        updateLines([event.points![0]], [event.points![1]])
         break;
     }
   }
