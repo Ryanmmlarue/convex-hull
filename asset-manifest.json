@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/convex-hull/static/css/main.d700773f.css",
-    "main.js": "/convex-hull/static/js/main.c94a3726.js",
+    "main.js": "/convex-hull/static/js/main.05309a94.js",
     "static/js/787.cb2ac3c9.chunk.js": "/convex-hull/static/js/787.cb2ac3c9.chunk.js",
     "index.html": "/convex-hull/index.html",
     "main.d700773f.css.map": "/convex-hull/static/css/main.d700773f.css.map",
-    "main.c94a3726.js.map": "/convex-hull/static/js/main.c94a3726.js.map",
+    "main.05309a94.js.map": "/convex-hull/static/js/main.05309a94.js.map",
     "787.cb2ac3c9.chunk.js.map": "/convex-hull/static/js/787.cb2ac3c9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d700773f.css",
-    "static/js/main.c94a3726.js"
+    "static/js/main.05309a94.js"
   ]
 }
