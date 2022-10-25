@@ -6,7 +6,13 @@ import quickHull from '../../utils/model/QuickHull';
 import Pseudocode from './Pseudocode/Pseudocode';
 import { EventType, HullEvent } from '../../utils/types/Event';
 
-// TODO: reverse order
+// TODO: reverse order, does not undo final step? 
+
+// consume history on reverse
+interface CanvasState {
+  circles: any[],
+  lines: any[]
+}
 
 const Aide = () => {
 
@@ -14,12 +20,15 @@ const Aide = () => {
   const initialLines: any = []
   const initialPoints: Point[] = []
   const initialEventQueue: HullEvent[] = []
+  const initialHistory: CanvasState[] = []
   const [lines, setLines] = useState(initialLines)
   const [circles, setCircles] = useState(initialCircles)
   const [points, setPoints] = useState(initialPoints)
   const [eventQueue, setEventQueue] = useState(initialEventQueue)
   const [eventIndex, setEventIndex] = useState(-1)
   const [drawAB, setDrawAB] = useState({a: null, b: null})
+  const [history, setHistory] = useState(initialHistory)
+  const [forward, setForward] = useState(true)
 
   const placePoint = (event: any) => {
     if (eventIndex === -1) {
@@ -92,12 +101,14 @@ const Aide = () => {
   const nextStep = () => {
     if ((eventIndex + 1) < eventQueue.length) {
       setEventIndex(eventIndex + 1)
+      setForward(true)
     }
   }
 
   const previousStep = () => {
-    if ((eventIndex - 1) >= 0) {
+    if ((eventIndex - 1) >= -1) {
       setEventIndex(eventIndex - 1)
+      setForward(false)
     }
   }
 
@@ -116,11 +127,14 @@ const Aide = () => {
     return -1
   }
 
+  const updateHistory = (canvasState: CanvasState) => {
+    const tempHistory = history.slice()
+    tempHistory.push(canvasState)
+    setHistory(tempHistory)
+  }
 
-  const animate = (event: HullEvent) => {
-
+  const forwardAnimate = (event: HullEvent) => {
     if (event === undefined) return;
-
     switch(event.eventType) {
       case EventType.FindMinMax:
         // color AB
@@ -161,6 +175,21 @@ const Aide = () => {
         }
         break;
     }
+    //@ts-ignore
+    if (forward) {
+      updateHistory({lines: lines, circles: circles})
+    }
+  }
+
+  const reverseAnimate = () => {
+    const tempHistory = history.slice()
+
+    const lastState = tempHistory.pop()
+
+    setCircles(lastState?.circles)
+    setLines(lastState?.lines)
+
+    setHistory(tempHistory)
   }
 
   // runs the quickHull algorithm any time a new point is added to the plane
@@ -173,7 +202,12 @@ const Aide = () => {
 
   // run the animate function every time the event index is updated
   useEffect(() => {
-    animate(eventQueue[eventIndex])
+    if (forward) {
+      forwardAnimate(eventQueue[eventIndex])
+    } else {
+      reverseAnimate()
+    }
+    
   }, [eventIndex])
 
   return(
@@ -207,8 +241,8 @@ const Aide = () => {
         <button 
           type="button" 
           className="btn btn-secondary"
-          // disabled={points.length < 3}
-          disabled = {true}
+          disabled={points.length < 3}
+          // disabled = {true}
           onClick={e => previousStep()}
         >
           Previous Step
