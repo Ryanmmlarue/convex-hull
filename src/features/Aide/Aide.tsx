@@ -87,6 +87,7 @@ const Aide = () => {
     updateCircleColors(indices, 'black')
     setEventIndex(-1)
     setDrawAB({a: null, b: null})
+    setHistory([])
   }
 
 
