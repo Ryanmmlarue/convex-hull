@@ -7,8 +7,7 @@ import Pseudocode from './Pseudocode/Pseudocode';
 import { EventType, HullEvent } from '../../utils/types/Event';
 
 // TODO: reverse order
-// TODO: horse-shoe shape breaks 
-// TODO: reset button not working
+// TODO: bucket shape breaks 
 
 const Aide = () => {
 
@@ -39,17 +38,16 @@ const Aide = () => {
     }
   }
 
-  const updateLines = (startPoints: Point[], endPoints: Point[], removeA?: Point, removeB?: Point) => {
+  const addAndRemoveLines = (addStartPoints: Point[], addEndPoints: Point[], removeA?: Point, removeB?: Point) => {
+    
     const tempLines = lines.slice()
-    for (let i = 0; i < startPoints.length; i++) {
-      if (findLineIndex(tempLines, startPoints[i], endPoints[i]) == -1) {
-        tempLines.push(<Line points={[startPoints[i].x, startPoints[i].y, endPoints[i].x, endPoints[i].y]} stroke={'green'}/>)
-      }
-      
+
+    for (let i = 0; i < addStartPoints.length; i++) {
+      if (findLineIndex(tempLines, addStartPoints[i], addEndPoints[i]) === -1) {
+        tempLines.push(<Line points={[addStartPoints[i].x, addStartPoints[i].y, addEndPoints[i].x, addEndPoints[i].y]} stroke={'green'}/>)
+      } 
     }
 
-
-    // this does not remove the correct index
     if (removeA && removeB && points.length > 3) {
       const index = findLineIndex(tempLines, removeA, removeB)
       if (index !== -1) {
@@ -60,7 +58,6 @@ const Aide = () => {
 
     setLines(tempLines)
   }
-
 
 
   const updateCircleColors = (indices: number[], color: string) => {
@@ -83,7 +80,7 @@ const Aide = () => {
   }
 
 
-  const clear = () => {
+  const clearData = () => {
     setCircles([])
     setPoints([])
     setLines([])
@@ -93,14 +90,12 @@ const Aide = () => {
   const nextStep = () => {
     if ((eventIndex + 1) < eventQueue.length) {
       setEventIndex(eventIndex + 1)
-      // animate(eventQueue[eventIndex])
     }
   }
 
   const previousStep = () => {
     if ((eventIndex - 1) >= 0) {
       setEventIndex(eventIndex - 1)
-      // animate(eventQueue[eventIndex])
     }
   }
 
@@ -131,23 +126,23 @@ const Aide = () => {
         break;
       case EventType.DrawLine:
         // draw AB
-        updateLines([event.points![0]], [event.points![1]])
+        addAndRemoveLines([event.points![0]], [event.points![1]])
         break;
       case EventType.FindC:
         // color C
         updateCircleColors([findPointIndex(event.points![0])], 'red')
-        updateLines([event.points![1]], [event.points![2]])
+        addAndRemoveLines([event.points![1]], [event.points![2]])
         break;
       case EventType.Divide:
         // draw PC, draw CQ, remove PQ
-        updateLines([event.points![0], event.points![1]], [event.points![1], event.points![2]], event.points![0], event.points![2])
+        addAndRemoveLines([event.points![0], event.points![1]], [event.points![1], event.points![2]], event.points![0], event.points![2])
         break;
       case EventType.RecurseS2QH:
-        updateLines([event.points![0]], [event.points![1]])
+      case EventType.RecurseS1QH:
+        addAndRemoveLines([event.points![0]], [event.points![1]])
         break;
     }
   }
-
 
   // runs the quickHull algorithm any time a new point is added to the plane
   useEffect(() => {
@@ -157,6 +152,7 @@ const Aide = () => {
     }
   }, [points])
 
+  // run the animate function every time the event index is updated
   useEffect(() => {
     animate(eventQueue[eventIndex])
   }, [eventIndex])
@@ -177,7 +173,7 @@ const Aide = () => {
         <button 
           type="button" 
           className="btn btn-secondary"  
-          onClick={clear}
+          onClick={clearData}
           >
             Clear Points
         </button>
