@@ -2,12 +2,15 @@ import { Card } from "react-bootstrap";
 import Pseudocode from "../Aide/Pseudocode/Pseudocode";
 import "./Home.css"
 
-
+/**
+ * Defines the Home component which contains various information regarding the 
+ * project
+ * @returns Returns the HTML components with project information
+ */
 const Home = () => {
 
 return (
   <>
-  
     <Card className="card">
       <Card.Body>
       <Card.Title>Team</Card.Title> 
@@ -50,7 +53,6 @@ return (
         </Card.Text>
       </Card.Body>
     </Card>
-
 
     <Card className="card">
       <Card.Body>
@@ -97,7 +99,6 @@ return (
         </Card.Text>
       </Card.Body>
     </Card>
-  
   </>
 )
 

@@ -19,7 +19,6 @@ const Aide = () => {
   const [points, setPoints] = useState(initialPoints)
   const [eventQueue, setEventQueue] = useState(initialEventQueue)
   const [eventIndex, setEventIndex] = useState(-1)
-  
   const [drawAB, setDrawAB] = useState({a: null, b: null})
 
   const placePoint = (event: any) => {

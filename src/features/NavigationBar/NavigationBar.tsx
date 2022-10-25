@@ -1,6 +1,11 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
+/**
+ * Defines the Navigation bar component which has links to all important 
+ * application routes.
+ * @returns A navigations bar
+ */
 const NavigationBar = () => {
 
   return (
