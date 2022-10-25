@@ -5,11 +5,14 @@ import { distanceToC, getMinMaxIndices, isCLeft } from "./QuickHullHelpers";
 
 const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: HullEvent[]) => {
 
+  // if there are no points in the list, return
   if (Sk.length === 0) {
     eventQueue.push({eventType: EventType.NoPointReturn})
     return;
   }
   
+
+  // find the furthest point from PQ and add it to the hull
   let C: Point = {x: 0, y: 0};
   let maxDistance = 0;
   Sk.forEach((point) => {
@@ -24,7 +27,8 @@ const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: Hu
   hull.push(C)
   eventQueue.push({eventType: EventType.FindC, points: [C, P, Q]})
   
-  
+
+  // split the points in Sk into those to the left and right of PQ
   eventQueue.push({eventType: EventType.Divide, points: [P, C, Q]})
   const s1: Point[] = []
   const s2: Point[] = []
@@ -40,6 +44,7 @@ const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: Hu
     }
   })
 
+  // Recurse on the set of points outside of the triangle formed by PQ, PC, CQ
   eventQueue.push({eventType: EventType.RecurseS1FH})
   findHull(s1, P, C, hull, eventQueue)
   eventQueue.push({eventType: EventType.RecurseS2FH})
@@ -62,11 +67,11 @@ const quickHull = (points: Point[]) => {
   const {minIndex, maxIndex} = getMinMaxIndices(points)
   hull.push(points[minIndex])
   hull.push(points[maxIndex])
-
   eventQueue.push({eventType: EventType.FindMinMax, points: [points[minIndex], points[maxIndex]]})
   eventQueue.push({eventType: EventType.DrawLine, points: [points[minIndex], points[maxIndex]]})
 
-  // divide points into left and right of line
+
+  // divide points into those to the left and right of line
   const s1: Point[] = []
   const s2: Point[] = []
   points.forEach((p) => {
@@ -79,13 +84,14 @@ const quickHull = (points: Point[]) => {
     }
   })
 
+
+  // recurse on the points to the left and right of AB
   eventQueue.push({eventType: EventType.RecurseS1QH, points: [points[minIndex], points[maxIndex]]})
   findHull(s1, points[minIndex], points[maxIndex], hull, eventQueue)
-
-
-  eventQueue.push({eventType: EventType.RecurseS2QH, points: [points[minIndex], points[maxIndex]]})
+  eventQueue.push({eventType: EventType.RecurseS2QH, points: [points[minIndex], points[maxIndex]], removeLine: s1.length === 0 ? false : true})
   findHull(s2, points[maxIndex], points[minIndex], hull, eventQueue)
 
+  // return the set of points on the hull and a log of steps taken to get the answer
   return {hull, eventQueue}
 }
 

@@ -8,7 +8,6 @@ interface PseudocodeProps {
 
 const Pseudocode = (props: PseudocodeProps) => {
 
-
   let previous = document.getElementsByClassName("highlighted");
 
   if (previous.length >= 1) {

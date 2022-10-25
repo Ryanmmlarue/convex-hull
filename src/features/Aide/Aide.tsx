@@ -20,6 +20,8 @@ const Aide = () => {
   const [points, setPoints] = useState(initialPoints)
   const [eventQueue, setEventQueue] = useState(initialEventQueue)
   const [eventIndex, setEventIndex] = useState(-1)
+  
+  const [drawAB, setDrawAB] = useState({a: null, b: null})
 
   const placePoint = (event: any) => {
     if (eventIndex === -1) {
@@ -77,6 +79,7 @@ const Aide = () => {
     const indices = points.map((p, i) => i)
     updateCircleColors(indices, 'black')
     setEventIndex(-1)
+    setDrawAB({a: null, b: null})
   }
 
 
@@ -85,6 +88,7 @@ const Aide = () => {
     setPoints([])
     setLines([])
     setEventIndex(-1)
+    setDrawAB({a: null, b: null})
   }
 
   const nextStep = () => {
@@ -138,8 +142,25 @@ const Aide = () => {
         addAndRemoveLines([event.points![0], event.points![1]], [event.points![1], event.points![2]], event.points![0], event.points![2])
         break;
       case EventType.RecurseS2QH:
+        // if all points are below the line, this causes a special animation case
+        if (!event.removeLine) {
+          //@ts-ignore
+          setDrawAB({a: event.points![0], b: event.points![1]})
+        }
+        addAndRemoveLines([event.points![0]], [event.points![1]])
+        break;
       case EventType.RecurseS1QH:
         addAndRemoveLines([event.points![0]], [event.points![1]])
+        break;
+      case EventType.NoPointReturn:
+        // if special animation case is triggered, handle it on last step
+        if (eventIndex === eventQueue.length - 1) {
+          if (drawAB.a !== null && drawAB.b !== null) {
+            //@ts-ignore
+            addAndRemoveLines([drawAB.a], [drawAB.b])
+          }
+          
+        }
         break;
     }
   }
