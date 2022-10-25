@@ -13,3 +13,12 @@ export interface Line {
     start: Point
     end: Point
 }
+
+/**
+ * Defines a discrete slice of the canvas's state by tracking all circles and 
+ * lines on the canvas 
+ */
+export interface CanvasState {
+    circles: any[],
+    lines: any[]
+  }

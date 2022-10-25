@@ -1,36 +1,49 @@
 import './Aide.css'
 import { Stage, Layer, Rect, Circle, Line } from 'react-konva';
 import { useEffect, useRef, useState } from 'react';
-import { Point } from '../../utils/types/DataTypes';
+import { Point, CanvasState } from '../../utils/types/DataTypes';
 import quickHull from '../../utils/model/QuickHull';
 import Pseudocode from './Pseudocode/Pseudocode';
 import { EventType, HullEvent } from '../../utils/types/Event';
 
-// TODO: reverse order, does not undo final step? 
 
-// consume history on reverse
-interface CanvasState {
-  circles: any[],
-  lines: any[]
-}
-
+/**
+ * Defines the Aide component. This manages the canvas and pseudocode's live 
+ * execution of the Quickhull animation 
+ * @returns The HTML component for the interactive canvas and the pseudocode
+ */
 const Aide = () => {
 
+  // define initial empty arrays with typing to manage state
   const initialCircles: any = []
   const initialLines: any = []
   const initialPoints: Point[] = []
   const initialEventQueue: HullEvent[] = []
   const initialHistory: CanvasState[] = []
+
+  // initializes an empty list of canvas line elements
   const [lines, setLines] = useState(initialLines)
+  // initializes an empty list of canvas circle elements
   const [circles, setCircles] = useState(initialCircles)
+  // initializes an empty list of point objects
   const [points, setPoints] = useState(initialPoints)
+  // initializes an empty event queue
   const [eventQueue, setEventQueue] = useState(initialEventQueue)
+  // initializes the event index
   const [eventIndex, setEventIndex] = useState(-1)
+  // defines an empty object for the special case event (all points on side of AB)
   const [drawAB, setDrawAB] = useState({a: null, b: null})
+  // defines an initial hhistory list
   const [history, setHistory] = useState(initialHistory)
+  // sets a flag indicating the direction of the animation step
   const [forward, setForward] = useState(true)
 
+  /**
+   * Adds a point and an associated canvas circle at the event's specified (x,y)
+   * @param event the mouse event indicating a canvas click
+   */
   const placePoint = (event: any) => {
+    // if the animation is in progress, ignore click, otherwise allow click
     if (eventIndex === -1) {
       const x = event.evt.layerX
       const y = event.evt.layerY
@@ -47,6 +60,13 @@ const Aide = () => {
     }
   }
 
+  /**
+   * 
+   * @param addStartPoints 
+   * @param addEndPoints 
+   * @param removeA 
+   * @param removeB 
+   */
   const addAndRemoveLines = (addStartPoints: Point[], addEndPoints: Point[], removeA?: Point, removeB?: Point) => {
     
     const tempLines = lines.slice()
@@ -62,13 +82,16 @@ const Aide = () => {
       if (index !== -1) {
         tempLines.splice(index, 1)
       }
-      
     }
 
     setLines(tempLines)
   }
 
-
+  /**
+   * 
+   * @param indices 
+   * @param color 
+   */
   const updateCircleColors = (indices: number[], color: string) => {
     let tempCircles = circles.slice()
 
@@ -76,11 +99,12 @@ const Aide = () => {
       let circle = tempCircles[i]
       tempCircles[i] = <Circle x={circle.props.x} y={circle.props.y} radius={circle.props.radius} fill={color}/>
     })
-
     setCircles(tempCircles)
   }
 
-
+  /**
+   * 
+   */
   const resetCanvas = () => {
     setLines([])
     const indices = points.map((p, i) => i)
@@ -90,7 +114,9 @@ const Aide = () => {
     setHistory([])
   }
 
-
+  /**
+   * 
+   */
   const clearData = () => {
     setCircles([])
     setPoints([])
@@ -99,6 +125,9 @@ const Aide = () => {
     setDrawAB({a: null, b: null})
   }
 
+  /**
+   * 
+   */
   const nextStep = () => {
     if ((eventIndex + 1) < eventQueue.length) {
       setEventIndex(eventIndex + 1)
@@ -106,6 +135,9 @@ const Aide = () => {
     }
   }
 
+  /**
+   * 
+   */
   const previousStep = () => {
     if ((eventIndex - 1) >= -1) {
       setEventIndex(eventIndex - 1)
@@ -113,10 +145,22 @@ const Aide = () => {
     }
   }
 
+  /**
+   * 
+   * @param point 
+   * @returns 
+   */
   const findPointIndex = (point: Point) => {
     return points.indexOf(point)
   }
 
+  /**
+   * 
+   * @param lines 
+   * @param a 
+   * @param b 
+   * @returns 
+   */
   const findLineIndex = (lines: any, a: Point, b: Point) => {
     for (let i = 0; i < lines.length; i++) {
       let points = lines[i].props.points
@@ -128,12 +172,21 @@ const Aide = () => {
     return -1
   }
 
+  /**
+   * 
+   * @param canvasState 
+   */
   const updateHistory = (canvasState: CanvasState) => {
     const tempHistory = history.slice()
     tempHistory.push(canvasState)
     setHistory(tempHistory)
   }
 
+  /**
+   * 
+   * @param event 
+   * @returns 
+   */
   const forwardAnimate = (event: HullEvent) => {
     if (event === undefined) return;
     switch(event.eventType) {
@@ -182,6 +235,9 @@ const Aide = () => {
     }
   }
 
+  /**
+   * 
+   */
   const reverseAnimate = () => {
     const tempHistory = history.slice()
 
@@ -234,6 +290,7 @@ const Aide = () => {
         <button 
           type="button" 
           className="btn btn-secondary"
+          // disable clear if animation is not in progress
           disabled = {eventIndex < 0}
           onClick = {e => {resetCanvas()}}
           >
@@ -242,8 +299,8 @@ const Aide = () => {
         <button 
           type="button" 
           className="btn btn-secondary"
+          // disable button if less than three points on canvas
           disabled={points.length < 3}
-          // disabled = {true}
           onClick={e => previousStep()}
         >
           Previous Step
@@ -251,6 +308,7 @@ const Aide = () => {
         <button 
           type="button" 
           className="btn btn-secondary"
+          // disable button if less than three points on canvas
           disabled={points.length < 3}
           onClick={e => nextStep()}
         >
