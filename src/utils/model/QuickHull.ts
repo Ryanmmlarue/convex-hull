@@ -2,7 +2,17 @@ import { Point } from "../types/DataTypes";
 import { EventType, HullEvent } from "../types/Event";
 import { distanceToC, getMinMaxIndices, isCLeft } from "./QuickHullHelpers";
 
-
+/**
+ * The recursive helper function, find a point C furthest from the segment PQ, 
+ * adds C to the hull, forms a triangle between PC, PQ, and QC, and recurses on 
+ * the points outside this triangle. 
+ * @param Sk the set of points to analyze
+ * @param P The left endpoint of the dividing segment
+ * @param Q The right endpoint of the dividing segment
+ * @param hull The current set of points comprising the hull
+ * @param eventQueue The list of actions taken to produce the hull
+ * @returns when Sk contains no points
+ */
 const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: HullEvent[]) => {
 
   // if there are no points in the list, return
@@ -51,7 +61,15 @@ const findHull = (Sk: Point[], P: Point, Q: Point, hull: Point[], eventQueue: Hu
   findHull(s2, C, Q, hull, eventQueue)
 
 } 
-  
+
+/**
+ * This is the main driver for the Quickhull algorithm. Finds the min and max 
+ * points in the plane and begins recursing on the subset of points created 
+ * between these points.
+ * @param points The set of points to run the algorithm on
+ * @returns The set of points on the hull and a list of events that occured to 
+ * find the points
+ */
 const quickHull = (points: Point[]) => {
 
   const eventQueue: HullEvent[] = [] 

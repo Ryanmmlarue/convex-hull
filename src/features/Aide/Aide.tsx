@@ -7,7 +7,6 @@ import Pseudocode from './Pseudocode/Pseudocode';
 import { EventType, HullEvent } from '../../utils/types/Event';
 
 // TODO: reverse order
-// TODO: bucket shape breaks 
 
 const Aide = () => {
 

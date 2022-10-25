@@ -2,18 +2,30 @@ import { useEffect} from 'react';
 import { EventType, HullEvent } from '../../../utils/types/Event';
 import './Pseudocode.css'
 
+/**
+ * Defines the props of the Pseudocode component
+ */
 interface PseudocodeProps {
   event?: HullEvent
 }
 
+/**
+ * Defines the Pseudocode component, which contains a table of all pseudocode 
+ * for the Quickhull algorithm.
+ * @param props contains the current event to be highlighted in the table
+ * @returns A table showing all of the pseudocode for the Quickhull algorithm
+ */
 const Pseudocode = (props: PseudocodeProps) => {
 
+  // find the last row that was highlighted, if it exists
   let previous = document.getElementsByClassName("highlighted");
 
+  // if a row was highlighted, unhighlight it
   if (previous.length >= 1) {
     previous[0].classList.remove("highlighted")
   }
 
+  // if an event was passed in, highlight the row associated with the given event
   if (props.event) {
     let line = document.getElementById(props.event.eventType.toString())!
     line.classList.add("highlighted")
