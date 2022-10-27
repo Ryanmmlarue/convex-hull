@@ -61,22 +61,24 @@ const Aide = () => {
   }
 
   /**
-   * 
-   * @param addStartPoints 
-   * @param addEndPoints 
-   * @param removeA 
-   * @param removeB 
+   * Adds and removes lines with endpoints specified.
+   * @param addStartPoints The start points of the lines to add
+   * @param addEndPoints  The end points of the lines to add
+   * @param removeA The start point of the line to remove
+   * @param removeB The end point of the line to remove
    */
   const addAndRemoveLines = (addStartPoints: Point[], addEndPoints: Point[], removeA?: Point, removeB?: Point) => {
     
     const tempLines = lines.slice()
 
+    // add the lines specified
     for (let i = 0; i < addStartPoints.length; i++) {
       if (findLineIndex(tempLines, addStartPoints[i], addEndPoints[i]) === -1) {
         tempLines.push(<Line points={[addStartPoints[i].x, addStartPoints[i].y, addEndPoints[i].x, addEndPoints[i].y]} stroke={'green'}/>)
       } 
     }
 
+    // if removal arguments are provided, find the associated line and remove it 
     if (removeA && removeB && points.length > 3) {
       const index = findLineIndex(tempLines, removeA, removeB)
       if (index !== -1) {
@@ -88,13 +90,15 @@ const Aide = () => {
   }
 
   /**
-   * 
-   * @param indices 
-   * @param color 
+   * Update circles at the given indices to the specified color
+   * @param indices A list of indices corresponding to the circle position in   
+   * the circles list
+   * @param color The color to update the circles 
    */
   const updateCircleColors = (indices: number[], color: string) => {
     let tempCircles = circles.slice()
 
+    // update circles at the indices provided and update the circles list
     indices.forEach(i => {
       let circle = tempCircles[i]
       tempCircles[i] = <Circle x={circle.props.x} y={circle.props.y} radius={circle.props.radius} fill={color}/>
@@ -103,32 +107,48 @@ const Aide = () => {
   }
 
   /**
-   * 
+   * Resets various state that controls the animation / canvas
    */
   const resetCanvas = () => {
+    // clear out all lines
     setLines([])
+    // update all circles colors back to black
     const indices = points.map((p, i) => i)
     updateCircleColors(indices, 'black')
+    // reset animation
     setEventIndex(-1)
+    // reset special case
     setDrawAB({a: null, b: null})
+    // reset animation direction to forward
+    setForward(true)
+    // reset history
     setHistory([])
   }
 
   /**
-   * 
+   * Clears out the entire canvas and resets all animations
    */
   const clearData = () => {
+    // remove all points from the plane
     setCircles([])
     setPoints([])
+    // remove all lines
     setLines([])
+    // reset animation
     setEventIndex(-1)
+    // reset special case
     setDrawAB({a: null, b: null})
+    // reset direction to forward
+    setForward(true)
+    // reset history
+    setHistory([])
   }
 
   /**
-   * 
+   * Increments the animaton by one step
    */
   const nextStep = () => {
+    // if the next step exists, increment
     if ((eventIndex + 1) < eventQueue.length) {
       setEventIndex(eventIndex + 1)
       setForward(true)
@@ -136,9 +156,10 @@ const Aide = () => {
   }
 
   /**
-   * 
+   * Decrements the animation by one step
    */
   const previousStep = () => {
+    // if the previous step exists, decrement
     if ((eventIndex - 1) >= -1) {
       setEventIndex(eventIndex - 1)
       setForward(false)
@@ -146,20 +167,20 @@ const Aide = () => {
   }
 
   /**
-   * 
-   * @param point 
-   * @returns 
+   * Returns the index of a given point
+   * @param point The point to locate
+   * @returns The index of the point in the points list
    */
   const findPointIndex = (point: Point) => {
     return points.indexOf(point)
   }
 
   /**
-   * 
-   * @param lines 
-   * @param a 
-   * @param b 
-   * @returns 
+   * Returns the index of the line associated with endpoints a,b
+   * @param lines The list of lines to search
+   * @param a The start point of the line
+   * @param b The end point of the line
+   * @returns The index of the line, or -1 if it does not exist
    */
   const findLineIndex = (lines: any, a: Point, b: Point) => {
     for (let i = 0; i < lines.length; i++) {
@@ -173,8 +194,8 @@ const Aide = () => {
   }
 
   /**
-   * 
-   * @param canvasState 
+   * Stores the previous canvas state in the history list
+   * @param canvasState A snapshot of the canvas's lines and circles
    */
   const updateHistory = (canvasState: CanvasState) => {
     const tempHistory = history.slice()
@@ -183,12 +204,20 @@ const Aide = () => {
   }
 
   /**
-   * 
-   * @param event 
-   * @returns 
+   * For a given event, determine what the event entails and perform the proper 
+   * canvas update
+   * @param event The event that took place along algo execution
+   * @returns If the event is undefined, return null
    */
   const forwardAnimate = (event: HullEvent) => {
     if (event === undefined) return;
+
+    // if the animation step was a forward step, store the current state of the canvas in the history 
+    //@ts-ignore
+    if (forward) {
+      updateHistory({lines: lines, circles: circles})
+    }
+
     switch(event.eventType) {
       case EventType.FindMinMax:
         // color AB
@@ -229,23 +258,22 @@ const Aide = () => {
         }
         break;
     }
-    //@ts-ignore
-    if (forward) {
-      updateHistory({lines: lines, circles: circles})
-    }
   }
 
   /**
-   * 
+   * Performs the reverse animation step by consuming the last item in the 
+   * history list and setting the current canvas state to it.
    */
   const reverseAnimate = () => {
+
     const tempHistory = history.slice()
 
+    // get the last canvas state from history and update the canvas to it
     const lastState = tempHistory.pop()
-
     setCircles(lastState?.circles)
     setLines(lastState?.lines)
 
+    // update history to not have the last state any more
     setHistory(tempHistory)
   }
 
@@ -300,7 +328,7 @@ const Aide = () => {
           type="button" 
           className="btn btn-secondary"
           // disable button if less than three points on canvas
-          disabled={points.length < 3}
+          disabled={points.length < 3 || eventIndex == -1}
           onClick={e => previousStep()}
         >
           Previous Step
