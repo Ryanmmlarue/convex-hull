@@ -1,6 +1,7 @@
 import { Card } from "react-bootstrap";
 import Pseudocode from "../Aide/Pseudocode/Pseudocode";
-import "./Home.css"
+import "./Home.css";
+
 
 /**
  * Defines the Home component which contains various information regarding the 
@@ -71,7 +72,18 @@ return (
       <Card.Body>
         <Card.Title>Design Choices</Card.Title>  
         <Card.Text>
-          TODO: Discuss any interesting choices that you made in the implementation of the algorithm.
+          One of the interesting things found when doing initial problem research was that many proposed implementations did not actually create true subsets of points for recursive steps. Rather than creating and recursing on subsets, these implementations would simply recurse with the whole set of points, testing all points against the segment to determine which points belonged in the subset. Rather than do this, the implementation for this project generates and recurses on the subsets, removing the extra checks at each recursive level.
+
+          <br />
+          <br />
+
+          Another interesting implementation choice was the means in which the animation steps are performed. One thing I noticed during initial testing was that the execution of the algorithm was effectively instantaneous. Because of this, I chose to take what I call a  "manifest-generation" approach. Essentially, the algorithm executes every time a point is added and outputs an ordered list with  discrete events it logged while calculating the hull. This list is then fed to the UI, and as the user steps through the animation, each step of this list is consumed and an underlying canvas management function interprets the event, draws the appropriate canvas elements, and highlights the correct line of pseudocode. To perform reverse steps, a similar approach was taken. As each canvas update is performed, the state of the canvas is stored in a list of canvas history. When a reverse steps is taken, the last element in the list is consumed and the canvas state is updated to reflect its previous state. These workflows are shown in the below diagram.
+
+          <br />
+          <br />
+
+          <img src={ require('../../state_diagram.png') } alt="State Diagram" className="center"/>
+
         </Card.Text>
       </Card.Body>
     </Card>
