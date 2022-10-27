@@ -33,12 +33,18 @@ return (
       <Card.Body>
         <Card.Title>Background Information</Card.Title> 
         <Card.Text>
-          TODO: Background information about the problem and approach. Does not need to be long (one or two paragraphs is ok), but state any 
-          assumptions that are necessary for your approach to work. <br />
+          Convex Hulls have a wide range of applications across various Computer Science domains. There are numerous algorithms for finding such structures with a wide range of time complexities, with one of the more efficient data structures being the Quickhull algorithm, which is analagous to Quicksort. Like quicksort, this algorithm is a divide and conquer algorithm, and has an expected time complexity of O(nlogn), with a worst-case time complexity of O(n<sup>2</sup>).
 
           <br />
+          <br />
 
-          There were several critical assumptions made for this project:
+          The core idea of the algorithm is to essentially divide the plane by a segment formed by its minimum and maximum endpoints. After this segment is created, the plane is split into subsets of points to the left and right of the segment, and the algoriths then recursively runs on each of these subsets until no more points lie to either side of the dividing segment. 
+
+
+          <br />
+          <br />
+
+          For this project specifically, there were several critical assumptions made when designing the algorithm's implementation:
           <ul>
             <li>
               Collinear points between two points are not included in Hull
