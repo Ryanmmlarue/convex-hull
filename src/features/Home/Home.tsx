@@ -117,6 +117,18 @@ return (
         </Card.Text>
       </Card.Body>
     </Card>
+
+
+    <Card className="card">
+      <Card.Body>
+      <Card.Title>Final Presentation Recording</Card.Title>
+        <Card.Text>
+        <a href="https://rit.zoom.us/rec/share/OHsugXHeDSW95oY_48HA5HA_O06Ied7TKLuevOs-3f8EqWj7P21Klw3BPuJw-Gwb.3qCjr4GyvJuTsixt?startTime=1669599562000">Zoom Link</a>
+
+        </Card.Text>
+      </Card.Body>
+    </Card>
+
   </>
 )
 
